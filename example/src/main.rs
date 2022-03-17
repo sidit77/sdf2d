@@ -1,6 +1,6 @@
 use glam::{Mat2, Vec2};
 use image::{GrayImage, Luma};
-use sdf2d::{Ops, Sdf, Shapes};
+use sdf2d::{Constant, Ops, Sdf, Shapes};
 
 fn main() {
     //let sdf = Shapes::circle(0.45)
@@ -11,10 +11,19 @@ fn main() {
     //    .union(Shapes::rectangle(0.1, 0.25)
     //        .translate(0.0, -0.5)
     //        .rotate(f32::to_radians(90.0)));
-    let sdf= Shapes::circle(0.55)
-        .subtract(Shapes::circle(0.35))
-        .translate(0.75, -0.435)
-        .intersection(Shapes::hexagon(0.75).rotate(f32::to_radians(90.0)));
+    //let sdf= Shapes::circle(0.55)
+    //    .subtract(Shapes::circle(0.35))
+    //    .translate(0.75, -0.435)
+    //    .intersection(Shapes::hexagon(0.75).rotate(f32::to_radians(90.0)));
+    let a = 0.75;
+    let h = 0.75 / f32::cos(f32::to_radians(30.0));
+    let g = 0.75 * f32::tan(f32::to_radians(30.0));
+    println!("{}, {}", h, g);
+    let sdf = Constant::Empty
+        .union(Shapes::circle(3.0 * g + 0.1)
+            .subtract(Shapes::circle(3.0 * g - 0.1))
+            .translate(2.0 * a, 0.0))
+        ;
 
     rasterize(512, 512, -3.0, sdf).save("output1.png").expect("Could not write img");
     rasterize(64, 64, -3.0, sdf).save("output2.png").expect("Could not write img");

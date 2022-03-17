@@ -58,3 +58,18 @@ pub trait Ops where Self: Sdf {
     }
 }
 impl<T: Sdf> Ops for T {}
+
+#[derive(Debug, Copy, Clone)]
+pub enum Constant {
+    Full,
+    Empty
+}
+
+impl Sdf for Constant {
+    fn density(&self, pos: Vec2) -> f32 {
+        match self {
+            Constant::Full => f32::NEG_INFINITY,
+            Constant::Empty => f32::INFINITY
+        }
+    }
+}
