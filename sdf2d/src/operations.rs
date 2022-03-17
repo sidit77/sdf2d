@@ -46,3 +46,12 @@ impl<L: Sdf, R: Sdf> Sdf for Subtraction<L, R> {
         -f32::min(-self.0.density(pos), self.1.density(pos))
     }
 }
+
+#[derive(Debug, Copy, Clone)]
+pub struct Intersection<L: Sdf, R: Sdf>(pub L, pub R);
+
+impl<L: Sdf, R: Sdf> Sdf for Intersection<L, R> {
+    fn density(&self, pos: Vec2) -> f32 {
+        f32::max(self.0.density(pos), self.1.density(pos))
+    }
+}

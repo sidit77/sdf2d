@@ -2,7 +2,7 @@ mod shapes;
 mod operations;
 
 use glam::{Mat2, Vec2};
-use crate::operations::{Invert, Rotation, Subtraction, Translation, Union};
+use crate::operations::{Intersection, Invert, Rotation, Subtraction, Translation, Union};
 use crate::shapes::{Circle, Hexagon, Horseshoe, Rectangle};
 
 pub trait Sdf : Sized{
@@ -52,6 +52,9 @@ pub trait Ops where Self: Sdf {
     }
     fn union<T: Sdf>(self, other: T) -> Union<Self, T> {
         Union(self, other)
+    }
+    fn intersection<T: Sdf>(self, other: T) -> Intersection<Self, T> {
+        Intersection(self, other)
     }
 }
 impl<T: Sdf> Ops for T {}
