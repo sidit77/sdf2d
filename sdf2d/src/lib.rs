@@ -3,7 +3,7 @@ mod operations;
 
 use glam::{Mat2, Vec2};
 use crate::operations::{Invert, Rotation, Subtraction, Translation, Union};
-use crate::shapes::{Circle, Hexagon, Rectangle};
+use crate::shapes::{Circle, Hexagon, Horseshoe, Rectangle};
 
 pub trait Sdf : Sized{
     fn density(&self, pos: Vec2) -> f32;
@@ -25,6 +25,14 @@ impl Shapes {
         Rectangle {
             width,
             height
+        }
+    }
+    pub fn horseshoe(angle: f32, radius: f32, length: f32, width: f32) -> Horseshoe {
+        Horseshoe {
+            angle,
+            radius,
+            length,
+            width,
         }
     }
 }

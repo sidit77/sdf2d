@@ -1,4 +1,4 @@
-use glam::{Vec2, Vec3, Vec3Swizzles};
+use glam::{Mat2, Vec2, Vec3, Vec3Swizzles};
 use crate::Sdf;
 
 #[derive(Debug, Copy, Clone)]
@@ -37,5 +37,33 @@ impl Sdf for Rectangle {
     fn density(&self, pos: Vec2) -> f32 {
         let d = pos.abs() - Vec2::new(self.width, self.height);
         d.max(Vec2::ZERO).length() + d.max_element().min(0.0)
+    }
+}
+
+#[derive(Debug, Copy, Clone)]
+pub struct Horseshoe {
+    pub angle: f32,
+    pub radius: f32,
+    pub length: f32,
+    pub width: f32
+}
+
+impl Sdf for Horseshoe {
+    fn density(&self, mut pos: Vec2) -> f32 {
+        let (sin, cos) = self.angle.sin_cos();
+        pos.x = pos.x.abs();
+        let l = pos.length();
+        pos = Mat2::from_cols_array(&[-cos, sin, sin, cos]) * pos;
+
+        if pos.x <= 0.0  {
+            if pos.y <= 0.0 {
+                pos.x = l * (-cos).signum()
+            }
+            pos.y = l;
+        }
+        pos.x = pos.x - self.length;
+        pos.y = (pos.y-self.radius).abs() - self.width;
+
+        return pos.max(Vec2::ZERO).length() + pos.max_element().min(0.0);
     }
 }
