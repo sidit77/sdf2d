@@ -1,9 +1,9 @@
 mod shapes;
 mod operations;
 
-use glam::Vec2;
-use crate::operations::{Invert, Subtraction, Translation, Union};
-use crate::shapes::{Circle, Hexagon};
+use glam::{Mat2, Vec2};
+use crate::operations::{Invert, Rotation, Subtraction, Translation, Union};
+use crate::shapes::{Circle, Hexagon, Rectangle};
 
 pub trait Sdf : Sized{
     fn density(&self, pos: Vec2) -> f32;
@@ -21,6 +21,12 @@ impl Shapes {
             radius
         }
     }
+    pub fn rectangle(width: f32, height: f32) -> Rectangle {
+        Rectangle {
+            width,
+            height
+        }
+    }
 }
 
 pub trait Ops where Self: Sdf {
@@ -28,7 +34,10 @@ pub trait Ops where Self: Sdf {
         Invert(self)
     }
     fn translate(self, x: f32, y: f32) -> Translation<Self> {
-        Translation(self, Vec2::new(x, y))
+        Translation(self, -Vec2::new(x, y))
+    }
+    fn rotate(self, angle: f32) -> Rotation<Self> {
+        Rotation(self, Mat2::from_angle(-angle))
     }
     fn subtract<T: Sdf>(self, other: T) -> Subtraction<Self, T> {
         Subtraction(self, other)

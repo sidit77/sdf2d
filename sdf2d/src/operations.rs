@@ -1,4 +1,4 @@
-use glam::Vec2;
+use glam::{Mat2, Vec2};
 use crate::Sdf;
 
 #[derive(Debug, Copy, Clone)]
@@ -15,9 +15,19 @@ pub struct Translation<T: Sdf>(pub T, pub Vec2);
 
 impl<T: Sdf> Sdf for Translation<T> {
     fn density(&self, pos: Vec2) -> f32 {
-        self.0.density(pos - self.1)
+        self.0.density(pos + self.1)
     }
 }
+
+#[derive(Debug, Copy, Clone)]
+pub struct Rotation<T: Sdf>(pub T, pub Mat2);
+
+impl<T: Sdf> Sdf for Rotation<T> {
+    fn density(&self, pos: Vec2) -> f32 {
+        self.0.density(self.1 *  pos)
+    }
+}
+
 
 #[derive(Debug, Copy, Clone)]
 pub struct Union<L: Sdf, R: Sdf>(pub L, pub R);

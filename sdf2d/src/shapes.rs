@@ -26,3 +26,16 @@ impl Sdf for Hexagon {
         return pos.length() * f32::signum(pos.y);
     }
 }
+
+#[derive(Debug, Copy, Clone)]
+pub struct Rectangle {
+    pub width: f32,
+    pub height: f32
+}
+
+impl Sdf for Rectangle {
+    fn density(&self, pos: Vec2) -> f32 {
+        let d = pos.abs() - Vec2::new(self.width, self.height);
+        d.max(Vec2::ZERO).length() + d.max_element().min(0.0)
+    }
+}
