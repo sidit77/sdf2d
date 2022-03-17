@@ -19,11 +19,11 @@ pub struct Hexagon {
 
 impl Sdf for Hexagon {
     fn density(&self, mut pos: Vec2) -> f32 {
-        let k = Vec3::new(-0.866025404,0.5,0.577350269);
+        let k = Vec3::new(-0.8660254,0.5,0.57735026);
         pos = pos.abs();
         pos -= 2.0 * k.xy().dot(pos).min(0.0) * k.xy();
         pos -= Vec2::new(f32::clamp(pos.x, -k.z * self.radius, k.z * self.radius), self.radius);
-        return pos.length() * f32::signum(pos.y);
+        pos.length() * f32::signum(pos.y)
     }
 }
 
@@ -61,9 +61,9 @@ impl Sdf for Horseshoe {
             }
             pos.y = l;
         }
-        pos.x = pos.x - self.length;
+        pos.x -= self.length;
         pos.y = (pos.y-self.radius).abs() - self.width;
 
-        return pos.max(Vec2::ZERO).length() + pos.max_element().min(0.0);
+        pos.max(Vec2::ZERO).length() + pos.max_element().min(0.0)
     }
 }

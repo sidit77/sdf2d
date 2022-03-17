@@ -66,7 +66,7 @@ pub enum Constant {
 }
 
 impl Sdf for Constant {
-    fn density(&self, pos: Vec2) -> f32 {
+    fn density(&self, _: Vec2) -> f32 {
         match self {
             Constant::Full => f32::NEG_INFINITY,
             Constant::Empty => f32::INFINITY
