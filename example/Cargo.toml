@@ -8,4 +8,4 @@ edition = "2021"
 [dependencies]
 sdf2d = {path = "../sdf2d"}
 image = "0.24"
-glam = "0.20"
+glam = "0.21"
